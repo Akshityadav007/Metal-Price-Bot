@@ -47,4 +47,8 @@ if __name__ == "__main__":
         send_telegram_message(message)      # push them to telegram chat
     except Exception as e:
         error_msg = f"❌ Error: {str(e)}"
-        send_telegram_message('❌ Failed to fetch prices! ❌')
+        message =  (f"🪙 *आज के भाव*\n"
+                f"📅 {datetime.now().strftime('%Y-%m-%d %H:%M')}\n\n"
+                f"❌ Failed to fetch prices! ❌"
+        )
+        send_telegram_message(message)
