@@ -44,7 +44,7 @@ if __name__ == "__main__":
     try:
         message = get_metal_prices()        # get the prices
         print(message)
-        # send_telegram_message(message)      # push them to telegram chat
+        send_telegram_message(message)      # push them to telegram chat
     except Exception as e:
         error_msg = f"❌ Error: {str(e)}"
-        # send_telegram_message('❌ Failed to fetch prices! ❌')
+        send_telegram_message('❌ Failed to fetch prices! ❌')
