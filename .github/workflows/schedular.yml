@@ -25,5 +25,5 @@ jobs:
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-          GOLD_API_KEY: ${{ secrets.GOLD_API_KEY }}
+          METAL_API_KEY: ${{ secrets.METAL_API_KEY }}
         run: python main.py
