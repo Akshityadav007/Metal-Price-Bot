@@ -1,0 +1,3 @@
+# APIs used
+- Telegram
+- Goldpricez
