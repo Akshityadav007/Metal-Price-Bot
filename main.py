@@ -8,11 +8,11 @@ load_dotenv()
 
 TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
-GOLD_API_KEY = os.getenv("GOLD_API_KEY")
+METAL_API_KEY = os.getenv("METAL_API_KEY")
 
 def get_metal_prices():
     headers = {
-        "x-access-token": GOLD_API_KEY,
+        "x-access-token": METAL_API_KEY,
         "Content-Type": "application/json"
     }
 
