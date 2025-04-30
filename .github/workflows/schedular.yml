@@ -1,0 +1,29 @@
+name: Daily Gold & Silver Update
+
+on:
+  schedule:
+    - cron: '30 3 * * *' # Runs daily at 9:00 AM IST (3:30 AM UTC)
+  workflow_dispatch:  # Allows manual trigger from GitHub
+
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run script
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          GOLD_API_KEY: ${{ secrets.GOLD_API_KEY }}
+        run: python main.py

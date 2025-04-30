@@ -39,20 +39,11 @@ def send_telegram_message(message):
     data = {"chat_id": TELEGRAM_CHAT_ID, "text": message, "parse_mode": "Markdown"}
     requests.post(url, data=data)
 
-def log_to_file(message):
-    os.makedirs("logs", exist_ok=True)
-    filename = datetime.now().strftime("logs/%Y-%m-%d_%H-%M-%S.txt")
-    with open(filename, "w") as f:
-        f.write(message)
-
-
 
 if __name__ == "__main__":
     try:
         message = get_metal_prices()        # get the prices
         send_telegram_message(message)      # push them to telegram chat
-        log_to_file(f"✅ Sent: {message}") # log today's script run
     except Exception as e:
         error_msg = f"❌ Error: {str(e)}"
         send_telegram_message('❌ Failed to fetch prices! ❌')
-        log_to_file(error_msg)
