@@ -1,3 +1,3 @@
 # APIs used
 - Telegram
-- Goldpricez
+- Metal Price API
