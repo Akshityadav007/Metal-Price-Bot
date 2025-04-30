@@ -28,8 +28,8 @@ def get_metal_prices():
     message = (
     f"🪙 *आज के भाव*\n"
     f"📅 {datetime.now().strftime('%Y-%m-%d %H:%M')}\n\n"
-    f"🥇 सोना : ₹{gold_price} / तोला\n"
-    f"🥈 चांदी : ₹{silver_price} / किलोग्राम"
+    f"🥇 सोना : ₹{int(gold_price):,} / तोला\n"  # Gold price formatted
+    f"🥈 चांदी : ₹{int(silver_price):,} / किलोग्राम"  # Silver price formatted
     )
 
     return message
@@ -43,7 +43,8 @@ def send_telegram_message(message):
 if __name__ == "__main__":
     try:
         message = get_metal_prices()        # get the prices
-        send_telegram_message(message)      # push them to telegram chat
+        print(message)
+        # send_telegram_message(message)      # push them to telegram chat
     except Exception as e:
         error_msg = f"❌ Error: {str(e)}"
-        send_telegram_message('❌ Failed to fetch prices! ❌')
+        # send_telegram_message('❌ Failed to fetch prices! ❌')
