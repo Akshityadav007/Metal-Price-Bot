@@ -1,3 +1,3 @@
 # APIs used
 - Telegram
-- Metal Price API
+- Metals.Dev

@@ -2,6 +2,11 @@ import requests
 import os
 from datetime import datetime
 from dotenv import load_dotenv
+from requests.structures import CaseInsensitiveDict
+from zoneinfo import ZoneInfo  # Built-in from Python 3.9+
+
+INDIA_TZ = ZoneInfo("Asia/Kolkata")
+now = datetime.now(INDIA_TZ)
 
 load_dotenv()
 
@@ -12,33 +17,32 @@ METAL_API_KEY = os.getenv("METAL_API_KEY")
 def get_metal_prices():
     try:
         # Step 1: Get USD to INR forex rate
-        forex_url = f"https://api.metalpriceapi.com/v1/latest?api_key={METAL_API_KEY}&base=USD&currencies=INR"
-        forex_data = requests.get(forex_url).json()
-        usd_to_inr = forex_data['rates']['INR']
-        
-        # Step 2: Get metal prices in USD per troy ounce
-        metals_url = f"https://api.metalpriceapi.com/v1/latest?api_key={METAL_API_KEY}&base=USD&currencies=XAU,XAG"
-        metals_data = requests.get(metals_url).json()
-        
-        # Convert to INR per gram (1 troy oz = 31.1035g)
-        gold_per_gram = (1 / metals_data['rates']['XAU']) * usd_to_inr / 31.1035
-        silver_per_gram = (1 / metals_data['rates']['XAG']) * usd_to_inr / 31.1035
+        url = f"https://api.metals.dev/v1/latest?api_key={METAL_API_KEY}&currency=INR&unit=kg"
+        headers = CaseInsensitiveDict()
+        headers["Accept"] = "application/json"
+
+        res = requests.get(url, headers=headers)
+        data = res.json()
+
+        # get gold/silver price
+        gold = data['metals']['mcx_gold']
+        silver = data['metals']['mcx_silver']
 
         # Apply Indian market premium (3% for gold, 5% for silver)
         INDIAN_GOLD_PREMIUM = 1.03
         INDIAN_SILVER_PREMIUM = 1.05
-        gold_22k = (gold_per_gram * INDIAN_GOLD_PREMIUM) * (22/24)
-        silver = silver_per_gram * INDIAN_SILVER_PREMIUM
+        gold_24k = (gold * INDIAN_GOLD_PREMIUM) / 100
+        silver = silver * INDIAN_SILVER_PREMIUM
 
         # Format with Indian numbering
         def format_price(price):
             return f"₹{price:,.2f}"
 
         message = (
-            f"🪙 *भारतीय बाजार भाव* (MCX-adjusted)\n"
-            f"📅 {datetime.now().strftime('%d-%m-%Y %H:%M')}\n\n"
-            f"🥇 सोना (22K): {format_price(gold_22k)}/ग्राम\n"
-            f"🥈 चांदी: {format_price(silver)}/ग्राम\n\n"
+            f"🪙 *भारतीय बाजार भाव* (MCX)\n"
+            f"📅 {datetime.now(ZoneInfo('Asia/Kolkata')).strftime('%d-%m-%Y %H:%M')}\n\n"
+            f"🥇 सोना (24K): {format_price(gold_24k)} / तोला\n"
+            f"🥈 चांदी: {format_price(silver)} / किलोग्राम\n\n"
             f"*Note*: Includes 3% (gold) & 5% (silver) Indian market premium"
         )
         
@@ -47,7 +51,7 @@ def get_metal_prices():
     except Exception as e:
         return (
             f"🪙 *Error Fetching Prices*\n"
-            f"📅 {datetime.now().strftime('%d-%m-%Y %H:%M')}\n\n"
+            f"📅 {datetime.now(ZoneInfo('Asia/Kolkata')).strftime('%d-%m-%Y %H:%M')}\n\n"
             f"⚠️ {str(e)}\n"
             f"Please check API status"
         )
@@ -67,13 +71,14 @@ def send_telegram_message(message):
 if __name__ == "__main__":
     try:
         prices = get_metal_prices()
-        send_telegram_message(prices)
+        print(prices)
+        # send_telegram_message(prices)
     except Exception as e:
         print(f"Error: {str(e)}")
-        send_telegram_message(
-            (
-                f"🪙 *भारतीय बाजार भाव* (MCX-adjusted)\n"
-                f"📅 {datetime.now().strftime('%d-%m-%Y %H:%M')}\n\n"
-                f"Failed to fetch prices!"
-                )
-        )
+        # send_telegram_message(
+        #     (
+        #         f"🪙 *भारतीय बाजार भाव* (MCX-adjusted)\n"
+        #         f"📅 {datetime.now().strftime('%d-%m-%Y %H:%M')}\n\n"
+        #         f"Failed to fetch prices!"
+        #         )
+        # )
