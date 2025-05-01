@@ -71,14 +71,13 @@ def send_telegram_message(message):
 if __name__ == "__main__":
     try:
         prices = get_metal_prices()
-        print(prices)
-        # send_telegram_message(prices)
+        send_telegram_message(prices)
     except Exception as e:
         print(f"Error: {str(e)}")
-        # send_telegram_message(
-        #     (
-        #         f"🪙 *भारतीय बाजार भाव* (MCX-adjusted)\n"
-        #         f"📅 {datetime.now().strftime('%d-%m-%Y %H:%M')}\n\n"
-        #         f"Failed to fetch prices!"
-        #         )
-        # )
+        send_telegram_message(
+            (
+                f"🪙 *भारतीय बाजार भाव* (MCX-adjusted)\n"
+                f"📅 {datetime.now().strftime('%d-%m-%Y %H:%M')}\n\n"
+                f"Failed to fetch prices!"
+                )
+        )
