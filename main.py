@@ -41,10 +41,15 @@ def get_metal_prices():
         message = (
             f"🪙 *भारतीय बाजार भाव* (MCX)\n"
             f"📅 {datetime.now(ZoneInfo('Asia/Kolkata')).strftime('%d-%m-%Y %H:%M')}\n\n"
-            f"🥇 सोना (24K): {format_price(gold_24k)} / तोला\n"
-            f"🥈 चांदी: {format_price(silver)} / किलोग्राम\n\n"
-            f"*Note*: Includes 3% (gold) & 5% (silver) Indian market premium"
+            
+            f"━━━━━━━━━━━━━━━\n"
+            f"🥇 *सोना (24K)*: {format_price(gold_24k)} / तोला\n"
+            f"🥈 *चांदी*: {format_price(silver)} / किलोग्राम\n"
+            f"━━━━━━━━━━━━━━━\n\n"
+
+            f"📝 *Note*: Includes 3% (gold) & 5% (silver) Indian market premium"
         )
+
         
         return message
 
